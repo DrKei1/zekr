@@ -2,17 +2,16 @@ package al.hamdu.lil.allah
 
 import al.hamdu.lil.allah.utils.getStringFromInputStream
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.Service
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.*
+import android.view.Gravity
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import kotlinx.coroutines.*
 import java.io.BufferedInputStream
-import java.util.*
+import java.util.Random
 
 
 class ZekrService : Service() {
@@ -64,17 +63,17 @@ class ZekrService : Service() {
         while (true) {
             fun randomDelayAmount() = (Random().nextInt(nextInt) + minSec).toLong()
             CoroutineScope(Dispatchers.Main).launch {
-                val txt = getGoodSentence(context).replace("\n" , "")
+                val txt = getGoodSentence(context)
                     Toast.makeText(context, txt, Toast.LENGTH_LONG).show()
-             }
+            }
                 Thread.sleep(randomDelayAmount())
             }
         }
     }
 
-    private fun getGoodSentence(context: Context) =
-        getStringFromInputStream(BufferedInputStream(context.resources.openRawResource(R.raw.good_sentences))).split(
+    private fun getGoodSentence(context: Context): String {
+        val sentencesList = getStringFromInputStream(BufferedInputStream(context.resources.openRawResource(R.raw.good_sentences))).split(
             '@'
-        ).random()
-
-
+        ).filter { x -> x.length < 55 }.filter { x -> x.length > 5 }
+        return sentencesList[Random().nextInt(sentencesList.size)].replace("\n" , "")
+    }
