@@ -13,7 +13,6 @@ import androidx.core.content.res.TypedArrayUtils.getText
 class MyNotification {
     private val channelId = "channelId"
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun buildNotification(context: Context, title: String, content: String) : Notification{
         createNotificationChannel(context)
         return NotificationCompat.Builder(context, channelId)
@@ -23,14 +22,6 @@ class MyNotification {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
     }
-
-//     fun showNotification(context: Context, notificationId: Int , notification: Notification){
-//        createNotificationChannel(context)
-//
-//         with(NotificationManagerCompat.from(context)) {
-//             notify(notificationId, notification)
-//         }
-//    }
      private fun createNotificationChannel(context: Context){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val name = context.resources.getString(R.string.channel_name)

@@ -5,10 +5,12 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.*
-import android.view.View
+import android.provider.Settings
 import androidx.annotation.RequiresApi
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedInputStream
 import java.util.*
 
@@ -18,9 +20,10 @@ class ZekrService : Service() {
     private var serviceHandler: ZekrService.ServiceHandler? = null
 
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
+        @RequiresApi(Build.VERSION_CODES.M)
         override fun handleMessage(msg: Message) {
             try {
-                GlobalScope.launch {
+                MainScope().launch {
                     showToast(this@ZekrService)
                 }
             } catch (e: InterruptedException) {
@@ -37,7 +40,6 @@ class ZekrService : Service() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         startForeground(1, MyNotification().buildNotification(this, "", getGoodSentence(this)))
         serviceHandler?.obtainMessage()?.also { msg ->
@@ -49,7 +51,8 @@ class ZekrService : Service() {
 
     override fun onBind(intent: Intent): IBinder? = null
 
-     fun showToast(context: Context) {
+    @RequiresApi(Build.VERSION_CODES.M)
+    suspend fun showToast(context: Context) {
         val aSecond = 1000
         val aMin = aSecond * 60
         val minSec = aMin * 2
@@ -57,13 +60,28 @@ class ZekrService : Service() {
         val nextInt = maxSec - minSec + 1
 
         while (true) {
-            throw (java.lang.NullPointerException())
             fun randomDelayAmount() = (Random().nextInt(nextInt) + minSec).toLong()
-            Handler(Looper.getMainLooper()).post(Runnable {
-                fun View.snack(str: String) = Snackbar.make(this, str, Snackbar.LENGTH_SHORT).show()
-                MainActivity().window?.decorView?.rootView?.snack("Done !!")
-            })
-            Thread.sleep(100)
+            val customWindow = CustomWindow(this@ZekrService)
+            withContext(Dispatchers.IO) {
+                withContext(Dispatchers.Main) {
+                    if (!Settings.canDrawOverlays(this@ZekrService)) {
+                        val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+                        startActivity(myIntent)
+                    }else{
+                        customWindow.open()
+                    }
+
+                    //Toast.makeText(context, getGoodSentence(context), Toast.LENGTH_LONG).show()
+                }
+                Thread.sleep(35000)
+                withContext(Dispatchers.Main) {
+                    customWindow.close()
+                }
+//                customWindow.close()
+//                Thread.sleep(2000)
+
+               Thread.sleep(randomDelayAmount())
+            }
         }
         }
     }
