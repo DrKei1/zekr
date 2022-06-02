@@ -5,12 +5,10 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.*
-import android.provider.Settings
 import androidx.annotation.RequiresApi
 import kotlinx.coroutines.*
 import java.io.BufferedInputStream
 import java.util.*
-import java.util.concurrent.atomic.AtomicBoolean
 
 
 class ZekrService : Service() {
@@ -64,7 +62,7 @@ class ZekrService : Service() {
                 synchronized(Lock){
                     while (true) {
                         customWindow.open(getGoodSentence(context))
-                        Thread.sleep(500)
+                        Thread.sleep(2000)
                     }
             }
         }
@@ -74,6 +72,6 @@ class ZekrService : Service() {
 private fun getGoodSentence(context: Context): String {
     val sentencesList = getStringFromInputStream(BufferedInputStream(context.resources.openRawResource(R.raw.good_sentences))).split(
         '@'
-    ).filter { x -> x.length < 55 }.filter { x -> x.length > 5 }
+    )//.filter { x -> x.length < 55 }.filter { x -> x.length > 5 }
     return sentencesList[Random().nextInt(sentencesList.size)].replace("\n" , "")
 }

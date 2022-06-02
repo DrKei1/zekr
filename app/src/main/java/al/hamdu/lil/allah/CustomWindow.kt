@@ -1,6 +1,7 @@
 package al.hamdu.lil.allah
 
 import al.hamdu.lil.allah.databinding.WindowPopupBinding
+import android.animation.Animator
 import android.content.Context
 import android.content.Context.WINDOW_SERVICE
 import android.graphics.PixelFormat
@@ -11,8 +12,13 @@ import android.view.*
 import android.view.WindowManager.LayoutParams
 import android.widget.Button
 import android.widget.TextView
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.internal.synchronized
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Thread.sleep
+import java.util.Objects
 
 
 class CustomWindow(private val context: Context) {
@@ -27,7 +33,7 @@ class CustomWindow(private val context: Context) {
     init {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             params = LayoutParams(
-                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT,
                 LayoutParams.TYPE_APPLICATION_OVERLAY,
                 LayoutParams.FLAG_NOT_FOCUSABLE
@@ -41,13 +47,15 @@ class CustomWindow(private val context: Context) {
         binding = WindowPopupBinding.inflate(layoutInflater)
         layout = binding.root.rootView
         btn = binding.closeBtn
-        txtView = binding.txtView
+        txtView = binding.titleTxtView
         btn.setOnClickListener { close() }
         params.gravity = Gravity.TOP
         params.verticalMargin = 0.03f
-        params.alpha = 0.9f
-
         windowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
+        layout.alpha = 0f
+
+        layout.animate().alpha(1f).duration = 5000
+        layout.background.alpha = 200
 
         layout.setOnTouchListener(object : View.OnTouchListener {
             private var initialX = 0
@@ -89,7 +97,6 @@ class CustomWindow(private val context: Context) {
                 return false
             }
         })
-
     }
 
     fun open(txt: String) {
