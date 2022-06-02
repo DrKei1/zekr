@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(activityMainBinding.root)
 
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
-
         activityMainBinding.button.setOnClickListener {
             if (!Settings.canDrawOverlays(this)) {
                 val intent = Intent(
