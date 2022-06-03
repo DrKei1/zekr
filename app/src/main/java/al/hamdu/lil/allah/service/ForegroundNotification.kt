@@ -1,16 +1,14 @@
-package al.hamdu.lil.allah
+package al.hamdu.lil.allah.service
 
+import al.hamdu.lil.allah.R
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.res.TypedArrayUtils.getText
 
-class MyNotification {
+class ForegroundNotification {
     private val channelId = "channelId"
 
     fun buildNotification(context: Context, title: String, content: String) : Notification{

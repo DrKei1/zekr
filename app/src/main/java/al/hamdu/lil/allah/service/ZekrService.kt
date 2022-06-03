@@ -1,6 +1,12 @@
-package al.hamdu.lil.allah
+package al.hamdu.lil.allah.service
 
-import al.hamdu.lil.allah.utils.getStringFromInputStream
+import al.hamdu.lil.allah.App
+import al.hamdu.lil.allah.R
+import al.hamdu.lil.allah.data.db.dao.ZekrDao
+import al.hamdu.lil.allah.data.db.entity.Zekr
+import al.hamdu.lil.allah.ui.DialogWinow
+import al.hamdu.lil.allah.data.utils.getStringFromInputStream
+import android.app.Application
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -14,12 +20,13 @@ import java.util.*
 class ZekrService : Service() {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ZekrService.ServiceHandler? = null
+    private var dao : ZekrDao? = null
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         @RequiresApi(Build.VERSION_CODES.M)
         override fun handleMessage(msg: Message) {
             try {
                 MainScope().launch {
-                    showToast(this@ZekrService)
+                    showZekr(this@ZekrService)
                 }
             } catch (e: InterruptedException) {
                 Thread.currentThread().interrupt()
@@ -36,7 +43,9 @@ class ZekrService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        startForeground(1, MyNotification().buildNotification(this, "", getGoodSentence(this)))
+        dao = App.getDao(applicationContext)
+        fillDataBase(applicationContext)
+        startForeground(1, ForegroundNotification().buildNotification(this, " a ", dao!!.getRandomItem().content.toString()))
         serviceHandler?.obtainMessage()?.also { msg ->
             msg.arg1 = startId
             serviceHandler?.sendMessage(msg)
@@ -46,9 +55,9 @@ class ZekrService : Service() {
 
     override fun onBind(intent: Intent): IBinder? = null
 
-    val Lock = Object()
+
     @RequiresApi(Build.VERSION_CODES.M)
-     fun showToast(context: Context) {
+    fun showZekr(context: Context) {
         val aSecond = 1000
         val aMin = aSecond * 60
         val minSec = aMin * 2
@@ -56,22 +65,36 @@ class ZekrService : Service() {
         val nextInt = maxSec - minSec + 1
 
         fun randomDelayAmount() = (Random().nextInt(nextInt) + minSec).toLong()
-        val customWindow = CustomWindow(this@ZekrService)
 
         MainScope().launch(Dispatchers.IO){
-                synchronized(Lock){
-                    while (true) {
-                        customWindow.open(getGoodSentence(context))
-                        Thread.sleep(2000)
-                    }
+            while (true) {
+                val dialogWinow = DialogWinow(this@ZekrService)
+                dialogWinow.open(dao!!.getRandomItem())
+                Thread.sleep(4000)
+                dialogWinow.close()
+                Thread.sleep(randomDelayAmount())
             }
+        }
+    }
+    private fun fillDataBase(context: Context){
+        for (i in getGoodSentences(context)){
+            dao!!.insertAll(Zekr(topic = "General" , title = "" , content = i))
         }
     }
 }
 
-private fun getGoodSentence(context: Context): String {
-    val sentencesList = getStringFromInputStream(BufferedInputStream(context.resources.openRawResource(R.raw.good_sentences))).split(
+
+
+private fun getGoodSentences(context: Context): List<String> {
+    return getStringFromInputStream(
+        BufferedInputStream(
+            context.resources.openRawResource(
+                R.raw.good_sentences
+            )
+        )
+    ).split(
         '@'
-    )//.filter { x -> x.length < 55 }.filter { x -> x.length > 5 }
-    return sentencesList[Random().nextInt(sentencesList.size)].replace("\n" , "")
+    ) //sentencesList[Random().nextInt(sentencesList.size)].replace("\n" , "")
 }
+
+

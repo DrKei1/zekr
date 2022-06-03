@@ -1,4 +1,4 @@
-package al.hamdu.lil.allah.utils
+package al.hamdu.lil.allah.data.utils
 
 import java.io.InputStream
 import java.io.InputStreamReader
