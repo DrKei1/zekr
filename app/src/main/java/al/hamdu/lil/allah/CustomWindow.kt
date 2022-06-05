@@ -119,7 +119,7 @@ class CustomWindow(private val context: Context) {
                     }
                 }
             } catch (e: Exception) {
-                Log.d("Error1", e.toString())
+                Log.d("Error01", e.toString())
             }
         }
     }
