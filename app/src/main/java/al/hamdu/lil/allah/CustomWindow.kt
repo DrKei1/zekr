@@ -129,7 +129,7 @@ class CustomWindow(private val context: Context) {
         try {
             (context.getSystemService(WINDOW_SERVICE) as WindowManager).removeView(layout)
         } catch (e: Exception) {
-            Log.d("Error2", e.toString())
+            Log.d("Error02", e.toString())
         }
     }
 }
