@@ -19,9 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zekr"
         tools:targetApi="31">
-        <service android:name=".ZekrService" />
+        <service android:name=".service.ZekrService" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
