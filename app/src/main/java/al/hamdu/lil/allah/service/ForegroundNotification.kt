@@ -14,7 +14,7 @@ class ForegroundNotification {
     fun buildNotification(context: Context, title: String, content: String) : Notification{
         createNotificationChannel(context)
         return NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(androidx.activity.R.drawable.notification_bg)
+            .setSmallIcon(R.drawable.ic_launcher_noor)
             .setContentTitle(title)
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

@@ -1,5 +1,6 @@
 package al.hamdu.lil.allah.ui
 
+import al.hamdu.lil.allah.App
 import al.hamdu.lil.allah.databinding.ActivityMainBinding
 import al.hamdu.lil.allah.service.ZekrService
 import android.content.Intent
@@ -34,6 +35,69 @@ class MainActivity : AppCompatActivity() {
                     startForegroundService(intent)
                 }else{
                     startService(intent)
+                }
+            }
+        }
+
+        with(activityMainBinding){
+            switchSalams.setOnCheckedChangeListener { buttonView, isChecked ->
+                val topic = "salams"
+                with(App.listOfRawNames){
+                    if (!isChecked){
+                        remove(topic)
+                    }else{
+                        if (!contains(topic)){
+                            add(topic)
+                        }
+                    }
+                }
+            }
+            switchAyat.setOnCheckedChangeListener { buttonView, isChecked ->
+                val topic = "ayat"
+                with(App.listOfRawNames){
+                    if (!isChecked){
+                        remove(topic)
+                    }else{
+                        if (!contains(topic)){
+                            add(topic)
+                        }
+                    }
+                }
+            }
+            switchAhadith.setOnCheckedChangeListener { buttonView, isChecked ->
+                val topic = "ahadith_godsi"
+                with(App.listOfRawNames){
+                    if (!isChecked){
+                        remove(topic)
+                    }else{
+                        if (!contains(topic)){
+                            add(topic)
+                        }
+                    }
+                }
+            }
+            switchPoems.setOnCheckedChangeListener { buttonView, isChecked ->
+                val topic = "poems"
+                with(App.listOfRawNames){
+                    if (!isChecked){
+                        remove(topic)
+                    }else{
+                        if (!contains(topic)){
+                            add(topic)
+                        }
+                    }
+                }
+            }
+            switchZekrs.setOnCheckedChangeListener { buttonView, isChecked ->
+                val topic = "zekrs"
+                with(App.listOfRawNames){
+                    if (!isChecked){
+                        remove(topic)
+                    }else{
+                        if (!contains(topic)){
+                            add(topic)
+                        }
+                    }
                 }
             }
         }

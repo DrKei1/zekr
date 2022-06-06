@@ -1,17 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EDD3AB"
-    android:gravity="center"
+    android:gravity="bottom"
+    android:orientation="vertical"
     tools:context=".ui.MainActivity">
 
-    <Button
-        android:id="@+id/button"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFA000"
-        android:text="شروع" />
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginBottom="100dp">
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFA000"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:layout_marginBottom="20dp"
+            android:text="شروع" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="#DDFFFFFF"
+            android:padding="20dp"
+            android:layout_margin="10dp">
+
+            <Switch
+                android:id="@+id/switch_ahadith"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:checked="true"
+                android:textColor="#FFA000"
+                android:textSize="20sp"
+                android:text="احادیث قدسی" />
+
+            <Switch
+                android:id="@+id/switch_ayat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:checked="true"
+                android:textColor="#FFA000"
+                android:textSize="20sp"
+                android:text="آیات قرآن" />
+
+            <Switch
+                android:id="@+id/switch_poems"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:checked="true"
+                android:textSize="20sp"
+                android:textColor="#FFA000"
+                android:text="اشعار" />
+
+            <Switch
+                android:id="@+id/switch_salams"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:checked="true"
+                android:textSize="20sp"
+                android:textColor="#FFA000"
+                android:text="سلام ها" />
+
+            <Switch
+                android:id="@+id/switch_zekrs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:checked="true"
+                android:textSize="20sp"
+                android:textColor="#FFA000"
+                android:text="اذکار" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
 </LinearLayout>

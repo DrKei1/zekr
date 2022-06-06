@@ -2,6 +2,8 @@ package al.hamdu.lil.allah.ui
 
 import al.hamdu.lil.allah.data.db.entity.Zekr
 import al.hamdu.lil.allah.databinding.WindowPopupBinding
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
 import android.content.Context
 import android.content.Context.WINDOW_SERVICE
 import android.graphics.PixelFormat
@@ -118,8 +120,25 @@ class DialogWinow(private val context: Context) {
     fun close() {
         try {
             MainScope().launch(Dispatchers.Main) {
-                layout.animate().alpha(0f).duration = 1000
-                showingState.value = false
+                layout.animate().alpha(0f).setListener(object : Animator.AnimatorListener{
+                    override fun onAnimationStart(animation: Animator?) {
+                        Log.d("ZekrTag" , "onAnimationStart")
+                    }
+                    override fun onAnimationEnd(animation: Animator?) {
+                        showingState.value = false
+                        windowManager.removeViewImmediate(layout)
+                        Log.d("ZekrTag" , "onAnimationEnd")
+                    }
+
+                    override fun onAnimationCancel(animation: Animator?) {
+                        Log.d("ZekrTag" , "onAnimationCancel")
+                    }
+
+                    override fun onAnimationRepeat(animation: Animator?) {
+                        Log.d("ZekrTag" , "onAnimationRepeat")
+                    }
+
+                }).duration = 1000
             }
         } catch (e: Exception) {
             Log.d("Error2", e.toString())

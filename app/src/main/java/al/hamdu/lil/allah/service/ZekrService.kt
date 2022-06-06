@@ -1,19 +1,13 @@
 package al.hamdu.lil.allah.service
 
 import al.hamdu.lil.allah.App
-import al.hamdu.lil.allah.R
 import al.hamdu.lil.allah.data.db.dao.ZekrDao
-import al.hamdu.lil.allah.data.db.entity.Zekr
 import al.hamdu.lil.allah.ui.DialogWinow
-import al.hamdu.lil.allah.data.utils.getStringFromInputStream
-import android.app.Application
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.*
 import androidx.annotation.RequiresApi
 import kotlinx.coroutines.*
-import java.io.BufferedInputStream
 import java.util.*
 
 
@@ -26,7 +20,7 @@ class ZekrService : Service() {
         override fun handleMessage(msg: Message) {
             try {
                 MainScope().launch {
-                    showZekr(this@ZekrService)
+                    showZekr()
                 }
             } catch (e: InterruptedException) {
                 Thread.currentThread().interrupt()
@@ -44,8 +38,9 @@ class ZekrService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         dao = App.getDao(applicationContext)
-        fillDataBase(applicationContext)
-        startForeground(1, ForegroundNotification().buildNotification(this, " a ", dao!!.getRandomItem().content.toString()))
+        startForeground(1, ForegroundNotification().buildNotification(this, " دائم الذکر ",
+            dao!!.getRandomItemTopic(App.listOfRawNames.random()).content
+        ))
         serviceHandler?.obtainMessage()?.also { msg ->
             msg.arg1 = startId
             serviceHandler?.sendMessage(msg)
@@ -57,7 +52,7 @@ class ZekrService : Service() {
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    fun showZekr(context: Context) {
+    fun showZekr() {
         val aSecond = 1000
         val aMin = aSecond * 60
         val minSec = aMin * 2
@@ -69,32 +64,13 @@ class ZekrService : Service() {
         MainScope().launch(Dispatchers.IO){
             while (true) {
                 val dialogWinow = DialogWinow(this@ZekrService)
-                dialogWinow.open(dao!!.getRandomItem())
-                Thread.sleep(4000)
+                dialogWinow.open(dao!!.getRandomItemTopic(App.listOfRawNames.random()))
+                Thread.sleep(5000)
                 dialogWinow.close()
                 Thread.sleep(randomDelayAmount())
             }
         }
     }
-    private fun fillDataBase(context: Context){
-        for (i in getGoodSentences(context)){
-            dao!!.insertAll(Zekr(topic = "General" , title = "" , content = i))
-        }
-    }
-}
-
-
-
-private fun getGoodSentences(context: Context): List<String> {
-    return getStringFromInputStream(
-        BufferedInputStream(
-            context.resources.openRawResource(
-                R.raw.good_sentences
-            )
-        )
-    ).split(
-        '@'
-    ) //sentencesList[Random().nextInt(sentencesList.size)].replace("\n" , "")
 }
 
 
