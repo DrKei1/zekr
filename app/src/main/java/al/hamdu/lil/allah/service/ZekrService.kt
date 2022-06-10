@@ -20,7 +20,7 @@ class ZekrService : Service() {
         override fun handleMessage(msg: Message) {
             try {
                 MainScope().launch {
-                    showZekr()
+                    showDialog()
                 }
             } catch (e: InterruptedException) {
                 Thread.currentThread().interrupt()
@@ -37,10 +37,14 @@ class ZekrService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        dao = App.getDao(applicationContext)
-        startForeground(1, ForegroundNotification().buildNotification(this, " دائم الذکر ",
-            dao!!.getRandomItemTopic(App.listOfRawNames.random()).content
-        ))
+        dao = App.getDao(this@ZekrService)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForeground(1, ForegroundNotification().buildNotification(this, " دائم الذکر ",
+                dao!!.getRandomItemTopic(App.listOfRawNames.random()).content
+            ))
+        }
+
         serviceHandler?.obtainMessage()?.also { msg ->
             msg.arg1 = startId
             serviceHandler?.sendMessage(msg)
@@ -51,8 +55,7 @@ class ZekrService : Service() {
     override fun onBind(intent: Intent): IBinder? = null
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    fun showZekr() {
+    fun showDialog() {
         val aSecond = 1000
         val aMin = aSecond * 60
         val minSec = aMin * 2
