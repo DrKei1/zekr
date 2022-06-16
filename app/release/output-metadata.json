@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "al.hamdu.lil.allah",
+  "applicationId": "zekr.ayat.quran.allah.islam.daeem.al.zekr",
   "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 7,
-      "versionName": "1.7",
+      "versionCode": 1,
+      "versionName": "1.8",
       "outputFile": "app-release.apk"
     }
   ],
