@@ -22,9 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(activityMainBinding.root)
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
         activityMainBinding.button.setOnClickListener {
-
             val intentToService = Intent(this, ZekrService()::class.java)
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
                     val intentToPermission = Intent(
