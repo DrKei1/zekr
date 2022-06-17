@@ -57,7 +57,7 @@ class DialogWinow(private val context: Context) {
         windowLayout.let {
             it.background.alpha = 200
             it.alpha = 0f
-            WindowsAnimator.animateIt(it, 1f, onStart = {}, onEnd = {},3000)
+            WindowsAnimator.animateIt(it, 1f, onStart = {}, onEnd = {},1000)
             windowLayout.setOnTouchListener(object : View.OnTouchListener {
                 private var initialX = 0
                 private var initialY = 0
@@ -128,6 +128,6 @@ class DialogWinow(private val context: Context) {
         WindowsAnimator.animateIt(windowLayout, 0f, onStart = {}, onEnd = {
             showingState.value = false
             if (windowLayout.isAttachedToWindow) windowManager.removeViewImmediate(windowLayout)
-        },1000)
+        },300)
     }
 }
