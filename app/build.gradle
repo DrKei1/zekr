@@ -10,7 +10,7 @@ android {
     namespace 'al.hamdu.lil.allah'
     compileSdk 32
     defaultConfig {
-        applicationId "zekr.ayat.quran.allah.islam.daeem.al.zekr"
+        applicationId "al.hamdu.lil.allah"
         minSdk 21
         targetSdk 32
         versionCode 1
