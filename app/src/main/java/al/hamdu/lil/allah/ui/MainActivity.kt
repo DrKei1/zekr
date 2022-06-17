@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
           //set prefrences shared interval edittext
             val pref = applicationContext.getSharedPreferences("MyPref", 0) // 0 - for private mode
             val editor: SharedPreferences.Editor = pref.edit()
-            
+
             editor.putString("time_interval_show_dialog", activityMainBinding.editTextNumberSigned.text.toString()); // Storing string
             editor.commit(); // commit changes
             Log.e("xxx",pref.getString("time_interval_show_dialog", null).toString())
